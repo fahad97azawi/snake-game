@@ -1,5 +1,5 @@
 import pygame
-import sys
+import os
 
 pygame.init
 WIN_WIDTH = 600 + 15
@@ -10,12 +10,13 @@ BLUE =  (  0,   0, 255)
 GREEN = (  0, 255,   0)
 RED =   (255,   0,   0)
 score = 0
+SNAKE_SEG = pygame.image.load('Red_block.png')
 screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEGIHT))
 running = True
 
 
 class Snake:
-    VEL = 0
+    VEL = score + 7
     def __init__(self, x = 300, y = 300, dirX = 0, dirY = 0):
         self.x = x
         self.y = y
@@ -23,9 +24,20 @@ class Snake:
         self.dirY = dirY
     
     def draw(self):
+        screen.fill(BLACK)
+        # pygame.draw.rect(screen, WHITE, [self.x, self.y, 15, 15])
+        screen.blit(SNAKE_SEG, (self.x, self.y))
+        if self.x > 615:
+            self.x = -15
+        elif self.x < 0:
+            self.x = 615
+        elif self.y > 615:
+            self.y = -15
+        elif self.y < 0:
+            self.y = 615
+         
         self.x = self.x + self.dirX
         self.y = self.y + self.dirY
-        pygame.draw.rect(screen, WHITE, [self.x, self.y, 15, 15]) 
 
     def move(self):
         for event in pygame.event.get():
@@ -56,7 +68,7 @@ clock = pygame.time.Clock()
 snake = Snake()
 
 while running:
-    clock.tick(7)
+    clock.tick(snake.VEL)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -82,12 +94,5 @@ while running:
     snake.draw()
     
     
-    pygame.display.flip()
+    # pygame.display.flip()
     pygame.display.update()
-    
-
-
-
-
-    
-
