@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 pygame.init
 WIN_WIDTH = 600 + 15
@@ -22,29 +23,31 @@ class Snake:
         self.dirY = dirY
     
     def draw(self):
+        self.x = self.x + self.dirX
+        self.y = self.y + self.dirY
         pygame.draw.rect(screen, WHITE, [self.x, self.y, 15, 15]) 
 
-    def move(self, event):
-        # for event in pygame.event.get():
-        while event.type == pygame.KEYDOWN:
-            if event.type == pygame.K_UP:
-                self.dirX = 0
-                self.dirY = -15
-                break
-            elif event.key == pygame.K_DOWN:
-                self.dirX = 0
-                self.dirY = 15
-                break
-            elif event.key == pygame.K_RIGHT:
-                self.dirX = 15
-                self.dirY = 0
-                break
-            elif event.key == pygame.K_LEFT:
-                self.dirX = -15
-                self.dirY = 0
-                break
-            # elif event.mouse == pygame.MOUSEBUTTONDOWN:
-            #     print('press')
+    def move(self):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.x = self.x + self.dirX
+                    self.y = self.y + self.dirY
+                    sys.exit()
+                    break
+                elif event.key == pygame.K_DOWN:
+                    self.dirX = 0
+                    self.dirY = 15
+                    break
+                elif event.key == pygame.K_RIGHT:
+                    self.dirX = 15
+                    self.dirY = 0
+                    break
+                elif event.key == pygame.K_LEFT:
+                    self.dirX = -15
+                    self.dirY = 0
+                    break
+            
         self.x = self.x + self.dirX
         self.y = self.y + self.dirY
         
@@ -53,11 +56,29 @@ clock = pygame.time.Clock()
 snake = Snake()
 
 while running:
-    clock.tick(5)
+    clock.tick(7)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        snake.move(event)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                snake.dirX = 0
+                snake.dirY = -15
+
+            elif event.key == pygame.K_DOWN:
+                snake.dirX = 0
+                snake.dirY = 15
+
+            elif event.key == pygame.K_RIGHT:
+                snake.dirX = 15
+                snake.dirY = 0
+            
+            elif event.key == pygame.K_LEFT:
+                snake.dirX = -15
+                snake.dirY = 0
+    # snake.x = snake.x + snake.dirX
+    # snake.y = snake.y + snake.dirY
+                
     snake.draw()
     
     
