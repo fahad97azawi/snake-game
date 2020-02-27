@@ -96,11 +96,12 @@ class Bait:
         if self.x == snake.x and self.y == snake.y:
             self.eaten = True
             score += 1
-            seglist.append(Body())
+            seglist.append(Body(body.add_seg()[0], body.add_seg()[1]))
+            print(seglist)
 
 
 class Body:
-    def __init__(self, x, y):
+    def __init__(self, x = None, y = None):
         self.x = x
         self.y = y
 
@@ -108,11 +109,15 @@ class Body:
         for seg in seglist:
             screen.blit(SNAKE_SEG, (seg.x, seg.y))
 
+    def add_seg(self):
+        self.x, self.y = snake.x - snake.dirX, snake.y - snake.dirY
+        return self.x, self.y
+
 
 clock = pygame.time.Clock()
 snake = Snake()
 bait = Bait()
-# body = Body()
+body = Body()
 seglist.append(snake)
 
 while running:
