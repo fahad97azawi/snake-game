@@ -97,7 +97,6 @@ class Bait:
             self.eaten = True
             score += 1
             seglist.append(Body(body.add_seg()[0], body.add_seg()[1]))
-            print(seglist)
 
 
 class Body:
@@ -107,18 +106,30 @@ class Body:
 
     def draw(self):
         for seg in seglist:
+            if len(seglist) == 0:
+                seg.x = snake.x - snake.dirX
+                seg.y = snake.y - snake.dirY
+            else:
+                last_seg = len(seglist) - 1
+                seg.x = seglist[last_seg].x - snake.dirX
+                seg.y = seglist[last_seg].y - snake.dirY
             screen.blit(SNAKE_SEG, (seg.x, seg.y))
 
     def add_seg(self):
-        self.x, self.y = snake.x - snake.dirX, snake.y - snake.dirY
+        if len(seglist) == 0:
+            self.x = snake.x - snake.dirX
+            self.y = snake.y - snake.dirY
+        else:
+            last_seg = len(seglist) - 1
+            self.x = seglist[last_seg].x - snake.dirX
+            self.y = seglist[last_seg].y - snake.dirY
         return self.x, self.y
-
 
 clock = pygame.time.Clock()
 snake = Snake()
 bait = Bait()
 body = Body()
-seglist.append(snake)
+
 
 while running:
     clock.tick(snake.VEL)
@@ -132,7 +143,7 @@ while running:
     draw_grid()
     bait.draw()
     snake.draw()
+    body.draw()
     bait.check_eaten()          
-    print(score)
     
     pygame.display.update()
